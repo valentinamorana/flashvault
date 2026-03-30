@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FLASHVAULT ✦ Capturá el momento</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,900&amp;family=Manrope:wght@400;500;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-background": "#1e1b17",
+                "inverse-primary": "#ffb2bf",
+                "on-primary": "#ffffff",
+                "surface-container-high": "#eee7df",
+                "primary-fixed": "#ffd9de",
+                "on-error": "#ffffff",
+                "tertiary": "#7a5500",
+                "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-secondary-fixed-variant": "#6a1b9a",
+                "on-tertiary-container": "#fffbff",
+                "error-container": "#ffdad6",
+                "surface-bright": "#fff8f1",
+                "surface": "#fff8f1",
+                "on-surface-variant": "#5a4044",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-container": "#fffbff",
+                "surface-container-low": "#f9f3eb",
+                "secondary-container": "#cc80fd",
+                "on-surface": "#1e1b17",
+                "tertiary-fixed": "#ffdeab",
+                "inverse-surface": "#33302b",
+                "error": "#ba1a1a",
+                "primary": "#b7004d",
+                "primary-container": "#dc2864",
+                "secondary-fixed-dim": "#e4b5ff",
+                "on-secondary-fixed": "#2f004b",
+                "surface-dim": "#dfd9d1",
+                "secondary": "#843ab4",
+                "surface-tint": "#bc004f",
+                "outline": "#8e6f74",
+                "tertiary-container": "#996d0e",
+                "outline-variant": "#e2bdc3",
+                "on-secondary-container": "#580087",
+                "surface-container": "#f4ede5",
+                "background": "#fff8f1",
+                "surface-variant": "#e8e1da"
+              },
+              fontFamily: {
+                "headline": ["Noto Serif"],
+                "body": ["Manrope"],
+                "label": ["Manrope"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            shadow-[0px_20px_40px_rgba(30,27,23,0.06)];
+        }
+        .glass-nav {
+            background: rgba(255, 248, 241, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, #ffd9de 0%, transparent 40%),
+                        radial-gradient(circle at bottom left, #f4d9ff 0%, transparent 40%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Navigation Shell -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full z-50 glass-nav shadow-[0px_20px_40px_rgba(30,27,23,0.06)] flex justify-between items-center px-8 py-3 transition-all">
+<div class="text-xl font-bold tracking-widest text-primary italic font-headline">FLASHVAULT ✦</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Producto</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Eventos</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Precios</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Comunidad</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform active:scale-95">
+            Crear evento →
+        </button>
+</nav>
+<!-- Section 1: Hero -->
+<section class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 hero-gradient overflow-hidden">
+<!-- Floating Sparks -->
+<div class="absolute top-20 left-1/4 text-tertiary-fixed animate-pulse">✦</div>
+<div class="absolute bottom-40 right-1/3 text-primary-fixed-dim text-2xl animate-bounce">✦</div>
+<div class="absolute top-1/2 left-10 text-secondary-fixed text-xl">✦</div>
+<div class="max-w-4xl z-10">
+<h1 class="font-headline text-6xl md:text-8xl font-black text-on-surface leading-tight mb-6 tracking-tight">
+                Capturá el momento.
+            </h1>
+<p class="font-headline text-2xl md:text-4xl italic text-on-surface-variant mb-12">
+                Compartilo al instante.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-primary/20 transition-all">
+                    Ver demo →
+                </button>
+<button class="bg-surface-container-highest text-on-surface px-10 py-4 rounded-full font-bold text-lg hover:bg-surface-container-high transition-all">
+                    Ver planes
+                </button>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
+<span class="text-xs font-bold tracking-widest uppercase">Scroll</span>
+<div class="w-px h-12 bg-on-surface-variant/30"></div>
+</div>
+</section>
+<!-- Section 2: El Problema -->
+<section class="py-32 px-6 max-w-7xl mx-auto">
+<div class="grid md:grid-cols-2 gap-12 items-stretch">
+<div class="bg-surface-container-low p-12 rounded-3xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-8 opacity-10 text-98xl font-headline italic">✗</div>
+<h3 class="text-3xl font-headline font-bold mb-8 text-error">Sin FlashVault</h3>
+<ul class="space-y-6">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-error">close</span>
+<p class="text-on-surface-variant">Fotos perdidas en grupos de WhatsApp que nadie vuelve a abrir.</p>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-error">close</span>
+<p class="text-on-surface-variant">Calidad comprimida y desorden visual total.</p>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-error">close</span>
+<p class="text-on-surface-variant">Tenés que perseguir a tus invitados para que te pasen las fotos.</p>
+</li>
+</ul>
+</div>
+<div class="bg-surface-container-lowest p-12 rounded-3xl shadow-[0px_20px_40px_rgba(30,27,23,0.06)] border border-primary/5 relative overflow-hidden group">
+<div class="absolute -top-4 -right-4 w-32 h-32 bg-secondary/10 rounded-full blur-3xl"></div>
+<h3 class="text-3xl font-headline font-bold mb-8 text-secondary">Con FlashVault</h3>
+<ul class="space-y-6">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="text-on-surface">Escaneá un QR y subí tus fotos sin instalar nada.</p>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="text-on-surface">Galería en vivo proyectada en el evento para que todos la vean.</p>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="text-on-surface">Descarga instantánea de todos los recuerdos en alta definición.</p>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Section 3: Cómo funciona -->
+<section class="py-32 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6">
+<h2 class="font-headline text-5xl font-bold text-center mb-20">¿Cómo funciona? Es magia.</h2>
+<div class="grid md:grid-cols-3 gap-16 relative">
+<!-- Connector Line -->
+<div class="hidden md:block absolute top-1/3 left-0 w-full h-px bg-primary/10 -z-0"></div>
+<div class="relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-lowest shadow-lg flex items-center justify-center mb-8 group-hover:scale-110 transition-transform bg-white z-10">
+<span class="material-symbols-outlined text-primary text-4xl">qr_code_2</span>
+</div>
+<h4 class="text-xl font-bold mb-4">1. Generá tu QR</h4>
+<p class="text-on-surface-variant px-4">Personalizá tu galería y generá el código para tus mesas o pantalla.</p>
+</div>
+<div class="relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-lowest shadow-lg flex items-center justify-center mb-8 group-hover:scale-110 transition-transform bg-white z-10">
+<span class="material-symbols-outlined text-secondary text-4xl">photo_camera</span>
+</div>
+<h4 class="text-xl font-bold mb-4">2. Invitados suben</h4>
+<p class="text-on-surface-variant px-4">Tus invitados sacan fotos y las suben directo desde su navegador. Sin apps.</p>
+</div>
+<div class="relative flex flex-col items-center text-center group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-lowest shadow-lg flex items-center justify-center mb-8 group-hover:scale-110 transition-transform bg-white z-10">
+<span class="material-symbols-outlined text-tertiary text-4xl">auto_awesome</span>
+</div>
+<h4 class="text-xl font-bold mb-4">3. Magia en vivo</h4>
+<p class="text-on-surface-variant px-4">Las fotos aparecen al instante en la pantalla gigante y en los teléfonos de todos.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Features -->
+<section class="py-32 px-6 max-w-7xl mx-auto">
+<div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+<div class="group p-10 rounded-3xl bg-surface-container-lowest shadow-[0px_10px_30px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all border border-transparent hover:border-primary/10">
+<span class="material-symbols-outlined text-primary text-5xl mb-6">dashboard_customize</span>
+<h3 class="text-2xl font-bold mb-4">Panel de administración</h3>
+<p class="text-on-surface-variant">Controlá cada detalle, moderá fotos antes de que aparezcan y personalizá los colores de tu marca.</p>
+</div>
+<div class="group p-10 rounded-3xl bg-surface-container-lowest shadow-[0px_10px_30px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all border border-transparent hover:border-secondary/10">
+<span class="material-symbols-outlined text-secondary text-5xl mb-6">upload_file</span>
+<h3 class="text-2xl font-bold mb-4">Página de carga</h3>
+<p class="text-on-surface-variant">Una interfaz intuitiva que funciona en cualquier dispositivo, diseñada para la velocidad del momento.</p>
+</div>
+<div class="group p-10 rounded-3xl bg-surface-container-lowest shadow-[0px_10px_30px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all border border-transparent hover:border-tertiary/10">
+<span class="material-symbols-outlined text-tertiary text-5xl mb-6">tv</span>
+<h3 class="text-2xl font-bold mb-4">Galería en vivo</h3>
+<p class="text-on-surface-variant">Conectá cualquier TV o proyector y mirá como la fiesta cobra vida en tiempo real.</p>
+</div>
+<div class="group p-10 rounded-3xl bg-surface-container-lowest shadow-[0px_10px_30px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all border border-transparent hover:border-primary/10">
+<span class="material-symbols-outlined text-primary-container text-5xl mb-6">download_for_offline</span>
+<h3 class="text-2xl font-bold mb-4">Descarga instantánea</h3>
+<p class="text-on-surface-variant">Al terminar el evento, bajá todas las fotos en un solo archivo .zip con la máxima calidad original.</p>
+</div>
+</div>
+</section>
+<!-- Section 5: Casos de uso -->
+<section class="py-32 overflow-hidden bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6 mb-12 flex justify-between items-end">
+<div>
+<h2 class="font-headline text-5xl font-bold mb-4">Hecho para celebrar.</h2>
+<p class="text-on-surface-variant">Donde haya gente festejando, ahí está FlashVault.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-outline/20 flex items-center justify-center hover:bg-white transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-outline/20 flex items-center justify-center hover:bg-white transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex gap-8 overflow-x-auto pb-12 px-6 no-scrollbar snap-x">
+<div class="min-w-[300px] snap-center bg-surface-container-lowest p-8 rounded-3xl shadow-sm text-center">
+<div class="text-5xl mb-6">🎂</div>
+<h4 class="text-xl font-bold">Cumpleaños</h4>
+</div>
+<div class="min-w-[300px] snap-center bg-surface-container-lowest p-8 rounded-3xl shadow-sm text-center">
+<div class="text-5xl mb-6">💍</div>
+<h4 class="text-xl font-bold">Casamientos</h4>
+</div>
+<div class="min-w-[300px] snap-center bg-surface-container-lowest p-8 rounded-3xl shadow-sm text-center">
+<div class="text-5xl mb-6">🏢</div>
+<h4 class="text-xl font-bold">Corporativos</h4>
+</div>
+<div class="min-w-[300px] snap-center bg-surface-container-lowest p-8 rounded-3xl shadow-sm text-center">
+<div class="text-5xl mb-6">🎊</div>
+<h4 class="text-xl font-bold">Fiestas de 15</h4>
+</div>
+<div class="min-w-[300px] snap-center bg-surface-container-lowest p-8 rounded-3xl shadow-sm text-center">
+<div class="text-5xl mb-6">👨‍👩‍👧‍👦</div>
+<h4 class="text-xl font-bold">Reuniones Familiares</h4>
+</div>
+</div>
+</section>
+<!-- Section 6: Precios -->
+<section class="py-32 px-6 max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline text-5xl font-bold mb-8">Elegí tu plan ideal</h2>
+<div class="inline-flex items-center p-1 bg-surface-container-high rounded-full">
+<button class="px-8 py-2 rounded-full bg-white shadow-sm font-bold text-sm">Pago por evento</button>
+<button class="px-8 py-2 rounded-full text-on-surface-variant font-medium text-sm">Suscripción mensual</button>
+</div>
+</div>
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+<!-- Basic -->
+<div class="bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-outline-variant/20 flex flex-col h-full">
+<h4 class="text-sm font-bold tracking-widest text-on-surface-variant mb-4 uppercase">BÁSICO</h4>
+<div class="text-4xl font-headline font-bold mb-6">$12</div>
+<ul class="space-y-4 mb-8 flex-grow">
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> 50 fotos</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> QR Standard</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Galería 24hs</li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary-fixed transition-colors">Empezar</button>
+</div>
+<!-- Fiesta (Popular) -->
+<div class="bg-surface-container-lowest p-8 rounded-3xl shadow-2xl border-2 border-primary relative flex flex-col h-[110%] z-10 scale-105">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-tertiary-fixed text-on-tertiary-fixed text-xs font-black px-4 py-1 rounded-full whitespace-nowrap">MÁS ELEGIDO ✦</div>
+<h4 class="text-sm font-bold tracking-widest text-primary mb-4 uppercase">FIESTA</h4>
+<div class="text-4xl font-headline font-bold mb-6">$25</div>
+<ul class="space-y-4 mb-8 flex-grow">
+<li class="text-sm font-bold flex gap-2 text-on-surface"><span class="material-symbols-outlined text-primary">check</span> Fotos ilimitadas</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-primary">check</span> QR Personalizado</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-primary">check</span> Live Gallery Streaming</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-primary">check</span> Moderación de fotos</li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold shadow-lg shadow-primary/30">Seleccionar Plan</button>
+</div>
+<!-- Pro -->
+<div class="bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-outline-variant/20 flex flex-col h-full">
+<h4 class="text-sm font-bold tracking-widest text-on-surface-variant mb-4 uppercase">PRO</h4>
+<div class="text-4xl font-headline font-bold mb-6">$45</div>
+<ul class="space-y-4 mb-8 flex-grow">
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Todo lo de Fiesta</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Dominio propio</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Video highlights</li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary-fixed transition-colors">Empezar</button>
+</div>
+<!-- Agencia -->
+<div class="bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-outline-variant/20 flex flex-col h-full">
+<h4 class="text-sm font-bold tracking-widest text-on-surface-variant mb-4 uppercase">AGENCIA</h4>
+<div class="text-4xl font-headline font-bold mb-6">$90<span class="text-lg font-body text-on-surface-variant italic">/mes</span></div>
+<ul class="space-y-4 mb-8 flex-grow">
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Eventos ilimitados</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Marca blanca total</li>
+<li class="text-sm flex gap-2"><span class="material-symbols-outlined text-xs">check</span> Soporte prioritario</li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary-fixed transition-colors">Empezar</button>
+</div>
+</div>
+<div class="mt-16 text-center">
+<a class="text-on-surface font-bold hover:text-primary transition-colors inline-flex items-center gap-2 group" href="#">
+                ¿Tenés dudas? Escribinos por WhatsApp 
+                <span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- Section 7: Testimonios -->
+<section class="py-32 bg-surface-container-low px-6">
+<div class="max-w-7xl mx-auto">
+<h2 class="font-headline text-5xl font-bold text-center mb-20 italic">Lo que dicen los que ya festejaron</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest p-10 rounded-3xl shadow-sm">
+<div class="flex gap-1 text-tertiary mb-6">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-lg font-headline italic mb-8">"¡Fue una bomba! Mis invitados se re coparon subiendo fotos y el video del final fue lo mejor de la noche."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary">MS</div>
+<div>
+<p class="font-bold">Martina S.</p>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Casamiento</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-3xl shadow-sm">
+<div class="flex gap-1 text-tertiary mb-6">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-lg font-headline italic mb-8">"Lo usamos para el cumple de 15 de mi hija y nos salvó. No tuvimos que pedir ni una sola foto después."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center font-bold text-secondary">JP</div>
+<div>
+<p class="font-bold">Juan Pablo G.</p>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Fiesta de 15</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-3xl shadow-sm">
+<div class="flex gap-1 text-tertiary mb-6">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-lg font-headline italic mb-8">"Impecable. Para el evento de la empresa funcionó de diez y descargamos todo en un toque."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center font-bold text-tertiary">RV</div>
+<div>
+<p class="font-bold">Rocío V.</p>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Corporativo</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 8: CTA Final + Footer -->
+<footer class="bg-surface text-on-surface">
+<div class="max-w-7xl mx-auto px-6 pt-32 pb-20">
+<div class="bg-gradient-to-br from-primary to-secondary rounded-[3rem] p-12 md:p-20 text-center text-on-primary mb-32 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-10 opacity-20 text-8xl animate-pulse">✦</div>
+<div class="relative z-10">
+<h2 class="font-headline text-5xl md:text-7xl font-black mb-8">¿Listo para el próximo evento?</h2>
+<div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+<button class="bg-white text-primary px-10 py-4 rounded-full font-bold text-xl hover:scale-105 transition-transform">
+                            Empezar ahora →
+                        </button>
+<button class="bg-transparent border-2 border-white/40 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-white/10 transition-all">
+                            Hablar con nosotros
+                        </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-t border-surface-container-high pt-20">
+<div class="md:col-span-1">
+<div class="text-2xl font-black text-primary italic font-headline mb-6">FLASHVAULT ✦</div>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-4">
+                        © 2024 FlashVault. Capturá el momento. Compartilo al instante.
+                    </p>
+</div>
+<div>
+<h5 class="font-bold mb-6">Producto</h5>
+<ul class="space-y-4 text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Cómo funciona</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Precios</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Características</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6">Empresa</h5>
+<ul class="space-y-4 text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Sobre nosotros</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contacto</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6">Seguinos</h5>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">camera</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">chat</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
