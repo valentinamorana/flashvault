@@ -238,12 +238,17 @@ async function generarCartelPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-  const nombre = document.getElementById('ev-nombre').value.trim() || 'Tu evento';
+  const nombreInput = document.getElementById('ev-nombre').value;
   const fecha = document.getElementById('ev-fecha').value;
   const color1 = document.getElementById('ev-color1').value;
   const color2 = document.getElementById('ev-color2').value;
 
-  const W = 210, H = 297;
+  const nombre = nombreInput && nombreInput.trim() !== ''
+    ? nombreInput.trim()
+    : 'Tu evento';
+
+  const W = 210;
+  const H = 297;
   const rgb1 = hexToRgb(color1);
   const rgb2 = hexToRgb(color2);
 
@@ -251,7 +256,7 @@ async function generarCartelPDF() {
   doc.setFillColor(255, 248, 240);
   doc.rect(0, 0, W, H, 'F');
 
-  // Marco superior e inferior
+  // Líneas superior e inferior
   doc.setDrawColor(...rgb1);
   doc.setLineWidth(2.5);
   doc.line(20, 16, W - 20, 16);
@@ -261,11 +266,9 @@ async function generarCartelPDF() {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(28);
   doc.setTextColor(...rgb1);
+  doc.text(nombre, W / 2, 58, { align: 'center' });
 
-  const nombreLimpio = nombre.length > 28 ? nombre.slice(0, 28) + '...' : nombre;
-  doc.text(nombreLimpio, W / 2, 58, { align: 'center' });
-
-  // Subtítulo opcional con fecha
+  // Fecha opcional
   if (fecha) {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(13);
@@ -273,12 +276,12 @@ async function generarCartelPDF() {
     doc.text(fecha, W / 2, 68, { align: 'center' });
   }
 
-  // Línea divisoria fina
-  doc.setDrawColor(...rgb2);
+  // Línea decorativa debajo del título
+  doc.setDrawColor(...rgb1);
   doc.setLineWidth(0.8);
   doc.line(55, 78, W - 55, 78);
 
-  // Mensaje principal
+  // Texto principal
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(22);
   doc.setTextColor(26, 26, 46);
@@ -293,10 +296,11 @@ async function generarCartelPDF() {
   doc.setTextColor(120, 100, 115);
   doc.text('En segundos. Sin apps. Sin registro.', W / 2, 122, { align: 'center' });
 
-  // Caja del QR
+  // Caja blanca para el QR
   doc.setFillColor(255, 255, 255);
   doc.roundedRect(52, 132, 106, 106, 6, 6, 'F');
 
+  // Insertar QR
   const canvas = document.querySelector('#qr-container canvas');
   if (canvas) {
     doc.addImage(canvas.toDataURL('image/png'), 'PNG', 60, 140, 90, 90);
@@ -309,7 +313,7 @@ async function generarCartelPDF() {
   doc.text('Todas las fotos del evento en un solo lugar', W / 2, 255, { align: 'center' });
 
   doc.setFontSize(10);
-  doc.setTextColor(160, 140, 150);
+  doc.setTextColor(...rgb2);
   doc.text('FlashVault', W / 2, 266, { align: 'center' });
 
   doc.save(`FlashVault_Cartel_${nombre.replace(/\s+/g, '_')}.pdf`);
