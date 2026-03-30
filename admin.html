@@ -101,7 +101,7 @@ input:checked+.slider::before{transform:translateX(18px)}
           <h2>Crear nuevo evento</h2>
           <div class="alert success" id="form-success">✅ Evento creado exitosamente</div>
           <div class="alert error" id="form-error"></div>
-          <div class="form-group"><label>Nombre del evento</label><input type="text" id="ev-nombre" placeholder="Ej: Cumple Mariana 50"></div>
+          <div class="form-group"><label>Nombre del evento</label><input type="text" id="ev-nombre" placeholder="Ej: Cumpleaños 50 Mariana"></div>
           <div class="form-row">
             <div class="form-group"><label>Tipo</label>
               <select id="ev-tipo">
@@ -114,7 +114,7 @@ input:checked+.slider::before{transform:translateX(18px)}
             </div>
             <div class="form-group"><label>Fecha</label><input type="date" id="ev-fecha"></div>
           </div>
-          <div class="form-group"><label>Texto de marca de agua</label><input type="text" id="ev-marca-texto" placeholder="Ej: Cumple Mariana 50 · Dic 2025"></div>
+          <div class="form-group"><label>Texto de marca de agua</label><input type="text" id="ev-marca-texto" placeholder="Ej: Cumpleaños 50 Mariana · Dic 2026"></div>
           <div class="form-group">
             <label>Colores</label>
             <div class="color-row">
@@ -122,7 +122,7 @@ input:checked+.slider::before{transform:translateX(18px)}
               <div><label style="font-size:11px">Secundario</label><input type="color" id="ev-color2" value="#6A1B9A"></div>
             </div>
           </div>
-          <div class="form-group"><label>Contraseña del evento (acceso admin)</label><input type="text" id="ev-pass" placeholder="Ej: mariana2025"></div>
+          <div class="form-group"><label>Contraseña del evento (acceso admin)</label><input type="text" id="ev-pass" placeholder="Ej: mariana2026"></div>
           <div class="toggle-row"><label>Marca de agua en descargas</label><label class="toggle"><input type="checkbox" id="ev-marca" checked><span class="slider"></span></label></div>
           <div class="toggle-row"><label>Moderación de fotos</label><label class="toggle"><input type="checkbox" id="ev-moderacion"><span class="slider"></span></label></div>
           <button class="btn btn-primary" onclick="crearEvento()">Crear evento y generar QR →</button>
@@ -157,8 +157,8 @@ input:checked+.slider::before{transform:translateX(18px)}
 
 <script src="supabase-config.js"></script>
 <script>
-const ADMIN_PASSWORD = "flashvault2025";
-const BASE_URL = "https://TU_USUARIO.github.io/flashvault";
+const ADMIN_PASSWORD = "flashvault2026";
+const BASE_URL = "https://valentinamorana.github.io/flashvault";
 
 let eventoActualId = null;
 let pollingInterval = null;
