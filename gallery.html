@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlashVault — Galería</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--rose:#E8336D;--purple:#6A1B9A;--gold:#C9973A;--dark:#1A1A2E;--muted:#888}
+body{font-family:'DM Sans',sans-serif;background:#F5F0FF;color:var(--dark);min-height:100vh}
+header{background:white;border-bottom:1px solid #E8D0E8;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--rose);font-weight:700}
+.logo span{color:var(--gold)}
+.event-title{font-size:14px;color:var(--purple);font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.header-actions{display:flex;gap:8px;align-items:center}
+.btn-sm{padding:8px 14px;border:1px solid var(--purple);background:white;color:var(--purple);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn-sm:hover{background:#F5F0FF}
+.btn-rose{background:var(--rose);color:white;border-color:var(--rose)}
+.btn-rose:hover{background:#C4175A}
+.stats-bar{background:white;border-bottom:1px solid #F0E8F8;padding:12px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.stat strong{color:var(--rose);font-size:18px}
+.pulse{display:inline-block;width:8px;height:8px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite;margin-right:4px}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.gallery-wrap{padding:24px}
+.grid{columns:2;gap:12px}
+@media(min-width:600px){.grid{columns:3}}
+@media(min-width:900px){.grid{columns:4}}
+.foto-card{break-inside:avoid;background:white;border-radius:14px;overflow:hidden;margin-bottom:12px;border:1px solid #EDE0F0;transition:transform .2s,box-shadow .2s}
+.foto-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(232,51,109,.12)}
+.foto-card img{width:100%;display:block;aspect-ratio:auto;cursor:pointer}
+.foto-actions{padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.reactions{display:flex;gap:6px}
+.reac-btn{background:none;border:1px solid #EDE0F0;border-radius:20px;padding:4px 10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s;color:var(--muted)}
+.reac-btn:hover{border-color:var(--rose);color:var(--rose);background:#FFF0F5}
+.dl-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:4px;transition:color .2s}
+.dl-btn:hover{color:var(--rose)}
+.empty{text-align:center;padding:80px 24px}
+.empty .icon{font-size:64px;margin-bottom:16px}
+.empty h3{font-family:'Playfair Display',serif;font-size:24px;color:var(--purple);margin-bottom:8px}
+.empty p{color:var(--muted);font-size:15px}
+#loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px}
+.spinner{width:40px;height:40px;border:3px solid #E8D0F8;border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#lightbox{display:none;position:fixed;inset:0;background:rgba(26,10,46,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:80vh;border-radius:12px;object-fit:contain}
+#lightbox-close{position:absolute;top:16px;right:20px;color:white;font-size:32px;cursor:pointer;background:none;border:none}
+#lightbox-actions{display:flex;gap:12px}
+#lightbox-actions button{padding:10px 20px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;border:none;font-weight:500}
+.lb-dl{background:var(--rose);color:white}
+.lb-close{background:rgba(255,255,255,.1);color:white}
+.new-tag{display:inline-block;background:var(--rose);color:white;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700;text-transform:uppercase;animation:fadeOut 3.5s forwards}
+@keyframes fadeOut{0%,70%{opacity:1}100%{opacity:0;transform:translateY(-4px)}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">FlashVault <span>✦</span></div>
+  <div class="event-title" id="ev-title">Cargando...</div>
+  <div class="header-actions">
+    <a id="link-upload" href="#" class="btn-sm" target="_blank">📸 Subir</a>
+    <a id="link-slideshow" href="#" class="btn-sm btn-rose" target="_blank">📺 TV</a>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat"><span class="pulse"></span> En vivo</div>
+  <div class="stat"><strong id="count-fotos">0</strong> fotos</div>
+</div>
+
+<div class="gallery-wrap">
+  <div id="loading"><div class="spinner"></div><p style="color:var(--muted)">Cargando...</p></div>
+  <div class="grid" id="grid" style="display:none"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="icon">📷</div>
+    <h3>El álbum está esperando</h3>
+    <p>Escaneá el QR para ser el primero</p>
+  </div>
+</div>
+
+<div id="lightbox">
+  <button id="lightbox-close" onclick="cerrarLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lightbox-actions">
+    <button class="lb-dl" onclick="descargarFoto()">⬇ Descargar</button>
+    <button class="lb-close" onclick="cerrarLightbox()">Cerrar</button>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script>
+let eventoData = null, eventoId = null, fotosMap = {}, fotoActualLB = null;
+const BASE_URL = window.location.href.split('/gallery.html')[0];
+
+async function init() {
+  eventoId = new URLSearchParams(window.location.search).get('evento');
+  if (!eventoId) { mostrarError('Evento no encontrado'); return; }
+  const { data } = await db.from('eventos').select('*').eq('id', eventoId).single();
+  if (!data) { mostrarError('Evento no encontrado'); return; }
+  eventoData = data;
+  aplicarTema();
+  await cargarFotos();
+  setInterval(cargarFotos, 5000); // polling cada 5 segundos
+}
+
+function aplicarTema() {
+  document.documentElement.style.setProperty('--rose', eventoData.color_primario);
+  document.documentElement.style.setProperty('--purple', eventoData.color_secundario);
+  document.getElementById('ev-title').textContent = eventoData.nombre;
+  document.title = `Galería — ${eventoData.nombre}`;
+  document.getElementById('link-upload').href    = `${BASE_URL}/upload.html?evento=${eventoId}`;
+  document.getElementById('link-slideshow').href = `${BASE_URL}/slideshow.html?evento=${eventoId}`;
+}
+
+async function cargarFotos() {
+  const { data: fotos } = await db.from('fotos').select('*')
+    .eq('evento_id', eventoId).eq('aprobada', true)
+    .order('creado_en', { ascending: false });
+
+  document.getElementById('loading').style.display = 'none';
+
+  if (!fotos?.length) {
+    document.getElementById('empty').style.display = 'block';
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('count-fotos').textContent = 0;
+    return;
+  }
+
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('grid').style.display = 'block';
+  document.getElementById('count-fotos').textContent = fotos.length;
+
+  // Agregar solo las nuevas
+  for (const foto of fotos) {
+    if (!fotosMap[foto.id]) {
+      fotosMap[foto.id] = foto;
+      agregarFotoAlGrid(foto, true);
+    } else {
+      // Actualizar reacciones si cambiaron
+      const el = document.getElementById(`reac-${foto.id}`);
+      if (el) {
+        document.getElementById(`rc-${foto.id}-c`).textContent = foto.reaccion_corazon;
+        document.getElementById(`rc-${foto.id}-a`).textContent = foto.reaccion_aplauso;
+        document.getElementById(`rc-${foto.id}-f`).textContent = foto.reaccion_fuego;
+      }
+    }
+  }
+}
+
+function agregarFotoAlGrid(foto, esNueva=false) {
+  const grid = document.getElementById('grid');
+  const card = document.createElement('div');
+  card.className = 'foto-card'; card.id = `foto-${foto.id}`;
+  card.innerHTML = `
+    ${esNueva && Object.keys(fotosMap).length > 1 ? '<div style="padding:6px 10px 0"><span class="new-tag">Nueva ✦</span></div>' : ''}
+    <img src="${foto.url}" alt="" loading="lazy" onclick="abrirLightbox('${foto.id}','${foto.url}')">
+    <div class="foto-actions">
+      <div class="reactions" id="reac-${foto.id}">
+        <button class="reac-btn" onclick="reaccionar('${foto.id}','corazon')">❤️ <span id="rc-${foto.id}-c">${foto.reaccion_corazon||0}</span></button>
+        <button class="reac-btn" onclick="reaccionar('${foto.id}','aplauso')">👏 <span id="rc-${foto.id}-a">${foto.reaccion_aplauso||0}</span></button>
+        <button class="reac-btn" onclick="reaccionar('${foto.id}','fuego')">🔥 <span id="rc-${foto.id}-f">${foto.reaccion_fuego||0}</span></button>
+      </div>
+      <button class="dl-btn" onclick="abrirLightbox('${foto.id}','${foto.url}')">⬇</button>
+    </div>`;
+  grid.prepend(card);
+}
+
+async function reaccionar(fotoId, tipo) {
+  const col = `reaccion_${tipo}`;
+  const actual = fotosMap[fotoId]?.[col] || 0;
+  await db.from('fotos').update({ [col]: actual + 1 }).eq('id', fotoId);
+  if (fotosMap[fotoId]) fotosMap[fotoId][col] = actual + 1;
+  document.getElementById(`rc-${fotoId}-${tipo[0]}`).textContent = actual + 1;
+}
+
+function abrirLightbox(id, url) {
+  fotoActualLB = { id, url };
+  document.getElementById('lb-img').src = url;
+  document.getElementById('lightbox').classList.add('open');
+}
+function cerrarLightbox() { document.getElementById('lightbox').classList.remove('open'); fotoActualLB = null; }
+
+async function descargarFoto() {
+  if (!fotoActualLB) return;
+  if (eventoData?.marca_de_agua) {
+    await descargarConMarcaDeAgua(fotoActualLB.url, eventoData.texto_marca || eventoData.nombre);
+  } else {
+    const a = document.createElement('a'); a.href = fotoActualLB.url; a.download = 'flashvault-foto.jpg'; a.target = '_blank'; a.click();
+  }
+}
+
+async function descargarConMarcaDeAgua(urlFoto, texto) {
+  return new Promise((resolve, reject) => {
+    const img = new Image(); img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const fontSize = Math.max(24, Math.floor(img.naturalWidth * 0.028));
+      ctx.font = `${fontSize}px 'DM Sans', sans-serif`;
+      ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+      const margen = fontSize * 0.8;
+      const tw = ctx.measureText(`✦ ${texto}`).width;
+      ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.shadowBlur = 0;
+      ctx.fillRect(canvas.width - tw - margen - fontSize, canvas.height - fontSize * 1.8 - margen, tw + fontSize, fontSize * 1.6);
+      ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 6;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillText(`✦ ${texto}`, canvas.width - margen, canvas.height - margen);
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `flashvault-${texto.replace(/\s+/g,'-')}.jpg`; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000); resolve();
+      }, 'image/jpeg', 0.92);
+    };
+    img.onerror = reject; img.src = urlFoto;
+  });
+}
+
+function mostrarError(msg) { document.getElementById('loading').innerHTML = `<p style="color:red">${msg}</p>`; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLightbox(); });
+init();
+</script>
+</body>
+</html>

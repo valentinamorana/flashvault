@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlashVault — Panel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--rose:#E8336D;--purple:#6A1B9A;--gold:#C9973A;--cream:#FFF8F0;--dark:#1A1A2E;--muted:#666;--border:#E8D0E8}
+body{font-family:'DM Sans',sans-serif;background:#F5F0FF;color:var(--dark);min-height:100vh}
+nav{background:white;border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:22px;color:var(--rose);font-weight:700}
+.logo span{color:var(--gold);margin-left:4px}
+.badge{background:var(--purple);color:white;font-size:11px;padding:4px 10px;border-radius:100px}
+.container{max-width:1100px;margin:0 auto;padding:32px 24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}}
+.card{background:white;border-radius:16px;padding:28px;border:1px solid var(--border)}
+.card h2{font-size:18px;font-weight:500;color:var(--purple);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.form-group{margin-bottom:16px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:500}
+input,select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:white;transition:border-color .2s}
+input:focus,select:focus{outline:none;border-color:var(--rose)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #F0E8F8}
+.toggle-row label{margin:0;font-size:14px;color:var(--dark)}
+.toggle{position:relative;width:42px;height:24px}
+.toggle input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#ddd;border-radius:24px;cursor:pointer;transition:.3s}
+.slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:.3s}
+input:checked+.slider{background:var(--rose)}
+input:checked+.slider::before{transform:translateX(18px)}
+.color-row{display:flex;gap:12px}
+.color-row input[type="color"]{width:50px;height:42px;padding:2px;cursor:pointer;border-radius:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--rose);color:white;width:100%;justify-content:center;font-size:15px;padding:14px;margin-top:8px}
+.btn-primary:hover{background:#C4175A;transform:translateY(-1px)}
+.btn-outline{background:white;color:var(--purple);border:1px solid var(--purple)}
+.btn-outline:hover{background:#F5F0FF}
+.btn-gold{background:var(--gold);color:white}
+.btn-gold:hover{background:#9A7520}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:8px}
+.event-card{border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;background:white}
+.event-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.event-name{font-weight:500;font-size:15px}
+.event-date{font-size:12px;color:var(--muted)}
+.event-stats{display:flex;gap:16px;font-size:13px;color:var(--muted);margin-bottom:12px}
+.event-stats strong{color:var(--rose)}
+.event-actions{display:flex;gap:8px;flex-wrap:wrap}
+.color-dot{width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+#qr-container{display:flex;justify-content:center;margin:16px 0}
+.stat-box{text-align:center;padding:16px;background:#FAF5FF;border-radius:12px}
+.stat-num{font-size:32px;font-weight:700;color:var(--rose);font-family:'Playfair Display',serif}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px}
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
+.alert.success{background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7}
+.alert.error{background:#FFEBEE;color:#C62828;border:1px solid #EF9A9A}
+.tabs{display:flex;gap:4px;background:#F0E8F8;border-radius:12px;padding:4px;margin-bottom:24px}
+.tab{flex:1;padding:10px;border:none;background:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;color:var(--muted);transition:.2s}
+.tab.active{background:white;color:var(--purple);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F5F0FF}
+.login-card{background:white;border-radius:20px;padding:40px 36px;max-width:380px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(106,27,154,.1)}
+.login-card .logo{font-size:28px;margin-bottom:8px;display:block}
+.login-card p{color:var(--muted);font-size:14px;margin-bottom:24px}
+.links-box{margin-top:16px;padding:12px;background:#F5F0FF;border-radius:10px;font-size:12px;line-height:2}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <span class="logo">FlashVault ✦</span>
+    <p>Panel de Administración</p>
+    <div class="form-group">
+      <label>Contraseña de admin</label>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="alert error" id="login-error">Contraseña incorrecta</div>
+    <button class="btn btn-primary" onclick="doLogin()">Entrar →</button>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <nav>
+    <div class="logo">FlashVault <span>✦</span></div>
+    <span class="badge">Admin</span>
+  </nav>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('crear')">＋ Nuevo evento</button>
+      <button class="tab" onclick="showTab('eventos')">Mis eventos</button>
+    </div>
+
+    <div id="tab-crear">
+      <div class="grid2">
+        <div class="card">
+          <h2>Crear nuevo evento</h2>
+          <div class="alert success" id="form-success">✅ Evento creado exitosamente</div>
+          <div class="alert error" id="form-error"></div>
+          <div class="form-group"><label>Nombre del evento</label><input type="text" id="ev-nombre" placeholder="Ej: Cumple Mariana 50"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Tipo</label>
+              <select id="ev-tipo">
+                <option value="cumpleanos">🎂 Cumpleaños</option>
+                <option value="casamiento">💍 Casamiento</option>
+                <option value="corporativo">🏢 Corporativo</option>
+                <option value="quince">🎊 Fiesta de 15</option>
+                <option value="otro">✨ Otro</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Fecha</label><input type="date" id="ev-fecha"></div>
+          </div>
+          <div class="form-group"><label>Texto de marca de agua</label><input type="text" id="ev-marca-texto" placeholder="Ej: Cumple Mariana 50 · Dic 2025"></div>
+          <div class="form-group">
+            <label>Colores</label>
+            <div class="color-row">
+              <div><label style="font-size:11px">Principal</label><input type="color" id="ev-color1" value="#E8336D"></div>
+              <div><label style="font-size:11px">Secundario</label><input type="color" id="ev-color2" value="#6A1B9A"></div>
+            </div>
+          </div>
+          <div class="form-group"><label>Contraseña del evento (acceso admin)</label><input type="text" id="ev-pass" placeholder="Ej: mariana2025"></div>
+          <div class="toggle-row"><label>Marca de agua en descargas</label><label class="toggle"><input type="checkbox" id="ev-marca" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><label>Moderación de fotos</label><label class="toggle"><input type="checkbox" id="ev-moderacion"><span class="slider"></span></label></div>
+          <button class="btn btn-primary" onclick="crearEvento()">Crear evento y generar QR →</button>
+        </div>
+
+        <div class="card" id="preview-panel" style="display:none">
+          <h2>QR y cartel generados</h2>
+          <div class="grid2" style="gap:12px;margin-bottom:16px">
+            <div class="stat-box"><div class="stat-num" id="stat-fotos">0</div><div class="stat-label">Fotos subidas</div></div>
+            <div class="stat-box"><div class="stat-num" id="stat-activo">✓</div><div class="stat-label">Evento activo</div></div>
+          </div>
+          <div id="qr-container"></div>
+          <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" onclick="descargarQR()">⬇ QR PNG</button>
+            <button class="btn btn-gold btn-sm" onclick="generarCartelPDF()">🖨 Cartel A4</button>
+            <button class="btn btn-outline btn-sm" onclick="copiarLinks()">🔗 Copiar links</button>
+          </div>
+          <div class="links-box">
+            <div><strong>Subida:</strong> <span id="link-upload" style="color:var(--rose);word-break:break-all"></span></div>
+            <div><strong>Galería:</strong> <span id="link-gallery" style="color:var(--purple);word-break:break-all"></span></div>
+            <div><strong>TV:</strong> <span id="link-slideshow" style="color:var(--gold);word-break:break-all"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-eventos" style="display:none">
+      <div class="card"><h2>Todos los eventos</h2><div id="eventos-list"><p style="color:var(--muted);text-align:center;padding:32px">Cargando...</p></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script>
+const ADMIN_PASSWORD = "flashvault2025";
+const BASE_URL = "https://TU_USUARIO.github.io/flashvault";
+
+let eventoActualId = null;
+let pollingInterval = null;
+
+function doLogin() {
+  if (document.getElementById('login-pass').value === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function showTab(tab) {
+  document.getElementById('tab-crear').style.display = tab === 'crear' ? 'block' : 'none';
+  document.getElementById('tab-eventos').style.display = tab === 'eventos' ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='crear')||(i===1&&tab==='eventos')));
+  if (tab === 'eventos') cargarEventos();
+}
+
+async function crearEvento() {
+  const nombre  = document.getElementById('ev-nombre').value.trim();
+  const tipo    = document.getElementById('ev-tipo').value;
+  const fecha   = document.getElementById('ev-fecha').value;
+  const color1  = document.getElementById('ev-color1').value;
+  const color2  = document.getElementById('ev-color2').value;
+  const marca   = document.getElementById('ev-marca').checked;
+  const moderar = document.getElementById('ev-moderacion').checked;
+  const pass    = document.getElementById('ev-pass').value.trim();
+  const textoM  = document.getElementById('ev-marca-texto').value.trim() || nombre;
+
+  if (!nombre || !fecha) { mostrarAlerta('form-error', 'Completá el nombre y la fecha'); return; }
+
+  const { data, error } = await db.from('eventos').insert({
+    nombre, tipo, fecha,
+    color_primario: color1, color_secundario: color2,
+    marca_de_agua: marca, texto_marca: textoM,
+    moderacion: moderar, password: pass,
+    activo: true
+  }).select().single();
+
+  if (error) { mostrarAlerta('form-error', 'Error: ' + error.message); return; }
+
+  eventoActualId = data.id;
+  mostrarAlerta('form-success');
+  mostrarPreview(data.id, nombre);
+  iniciarPolling(data.id);
+}
+
+function mostrarPreview(id, nombre) {
+  document.getElementById('preview-panel').style.display = 'block';
+  const uploadURL    = `${BASE_URL}/upload.html?evento=${id}`;
+  const galleryURL   = `${BASE_URL}/gallery.html?evento=${id}`;
+  const slideshowURL = `${BASE_URL}/slideshow.html?evento=${id}`;
+  document.getElementById('link-upload').textContent    = uploadURL;
+  document.getElementById('link-gallery').textContent   = galleryURL;
+  document.getElementById('link-slideshow').textContent = slideshowURL;
+  document.getElementById('qr-container').innerHTML = '';
+  new QRCode(document.getElementById('qr-container'), {
+    text: uploadURL, width: 220, height: 220,
+    colorDark: "#1A1A2E", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+function iniciarPolling(eventoId) {
+  if (pollingInterval) clearInterval(pollingInterval);
+  const actualizar = async () => {
+    const { count } = await db.from('fotos').select('*', { count: 'exact', head: true }).eq('evento_id', eventoId);
+    document.getElementById('stat-fotos').textContent = count || 0;
+  };
+  actualizar();
+  pollingInterval = setInterval(actualizar, 5000);
+}
+
+async function generarCartelPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const nombre = document.getElementById('ev-nombre').value.trim();
+  const color1 = document.getElementById('ev-color1').value;
+  const color2 = document.getElementById('ev-color2').value;
+  const W = 210, H = 297;
+  const rgb1 = hexToRgb(color1), rgb2 = hexToRgb(color2);
+
+  doc.setFillColor(255, 248, 240); doc.rect(0, 0, W, H, 'F');
+  doc.setDrawColor(...rgb1); doc.setLineWidth(3); doc.line(15, 12, W-15, 12);
+  doc.setTextColor(...rgb1); doc.setFontSize(14);
+  doc.text('✦   ·   ✦   ·   ✦   ·   ✦   ·   ✦', W/2, 28, { align: 'center' });
+
+  const partes = nombre.split(' '), mitad = Math.ceil(partes.length/2);
+  const l1 = partes.slice(0, mitad).join(' '), l2 = partes.slice(mitad).join(' ');
+  doc.setFont('helvetica', 'bold');
+  if (l2) {
+    doc.setFontSize(38); doc.setTextColor(...rgb1); doc.text(l1, W/2, 58, { align: 'center' });
+    doc.setFontSize(52); doc.setTextColor(...rgb2); doc.text(l2, W/2, 80, { align: 'center' });
+  } else {
+    doc.setFontSize(48); doc.setTextColor(...rgb1); doc.text(nombre, W/2, 70, { align: 'center' });
+  }
+
+  doc.setFontSize(18); doc.setTextColor(...rgb1);
+  doc.text('─────────  🌸  ─────────', W/2, 100, { align: 'center' });
+  doc.setFontSize(26); doc.setTextColor(26, 26, 46);
+  doc.text('¡Escaneá el código', W/2, 120, { align: 'center' });
+  doc.setTextColor(...rgb1); doc.text('y subí tus fotos!', W/2, 134, { align: 'center' });
+
+  const canvas = document.querySelector('#qr-container canvas');
+  if (canvas) doc.addImage(canvas.toDataURL('image/png'), 'PNG', (W-90)/2, 148, 90, 90);
+
+  doc.setFontSize(16); doc.setTextColor(...rgb1);
+  doc.text('─────────  🌸  ─────────', W/2, 252, { align: 'center' });
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(13); doc.setTextColor(138, 96, 112);
+  doc.text('Las fotos se guardan automáticamente', W/2, 265, { align: 'center' });
+  doc.text('¡Gracias por estar acá! 💕', W/2, 275, { align: 'center' });
+  doc.setDrawColor(...rgb1); doc.setLineWidth(3); doc.line(15, 285, W-15, 285);
+
+  doc.save(`FlashVault_Cartel_${nombre.replace(/\s+/g,'_')}.pdf`);
+}
+
+function hexToRgb(hex) {
+  return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+}
+
+function descargarQR() {
+  const canvas = document.querySelector('#qr-container canvas');
+  if (!canvas) return;
+  const a = document.createElement('a');
+  a.download = `QR_${eventoActualId}.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+function copiarLinks() {
+  const u = document.getElementById('link-upload').textContent;
+  const g = document.getElementById('link-gallery').textContent;
+  const s = document.getElementById('link-slideshow').textContent;
+  navigator.clipboard.writeText(`📸 Subir: ${u}\n🖼 Galería: ${g}\n📺 TV: ${s}`);
+  alert('Links copiados');
+}
+
+async function cargarEventos() {
+  const lista = document.getElementById('eventos-list');
+  lista.innerHTML = '<p style="color:var(--muted);text-align:center;padding:32px">Cargando...</p>';
+  const { data: eventos } = await db.from('eventos').select('*').order('creado_en', { ascending: false });
+  if (!eventos?.length) { lista.innerHTML = '<p style="color:var(--muted);text-align:center;padding:32px">No hay eventos.</p>'; return; }
+  lista.innerHTML = '';
+  for (const e of eventos) {
+    const { count } = await db.from('fotos').select('*', { count: 'exact', head: true }).eq('evento_id', e.id);
+    lista.innerHTML += `
+      <div class="event-card">
+        <div class="event-header">
+          <div><span class="color-dot" style="background:${e.color_primario}"></span><span class="event-name">${e.nombre}</span></div>
+          <span class="event-date">${e.fecha}</span>
+        </div>
+        <div class="event-stats">
+          <span>📸 <strong>${count||0}</strong> fotos</span>
+          <span>${e.tipo}</span>
+          ${e.marca_de_agua?'<span>💧 Marca de agua</span>':''}
+          ${e.moderacion?'<span>🛡 Moderación</span>':''}
+        </div>
+        <div class="event-actions">
+          <button class="btn btn-outline btn-sm" onclick="regenerarQR('${e.id}','${e.nombre}')">Ver QR</button>
+          <a href="${BASE_URL}/gallery.html?evento=${e.id}" target="_blank" class="btn btn-outline btn-sm">Ver galería</a>
+          <a href="${BASE_URL}/slideshow.html?evento=${e.id}" target="_blank" class="btn btn-outline btn-sm">📺 TV</a>
+          <button class="btn btn-sm" style="background:#FFEBEE;color:#C62828" onclick="desactivarEvento('${e.id}')">Desactivar</button>
+        </div>
+      </div>`;
+  }
+}
+
+async function desactivarEvento(id) {
+  if (!confirm('¿Desactivar?')) return;
+  await db.from('eventos').update({ activo: false }).eq('id', id);
+  cargarEventos();
+}
+
+function regenerarQR(id, nombre) {
+  eventoActualId = id;
+  mostrarPreview(id, nombre);
+  showTab('crear');
+  iniciarPolling(id);
+}
+
+function mostrarAlerta(id, msg) {
+  const el = document.getElementById(id);
+  if (msg) el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+</script>
+</body>
+</html>
